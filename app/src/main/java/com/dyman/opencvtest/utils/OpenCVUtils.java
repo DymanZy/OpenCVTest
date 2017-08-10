@@ -4,28 +4,21 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.util.Log;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Range;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.ml.CvKNearest;
 
 /**
  * Created by dyman on 2017/8/10.
+ *  封装了一些OpenCV的图像处理的方法
  */
 
 public class OpenCVUtils {
 
     private static final String TAG = OpenCVUtils.class.getSimpleName();
-
-    public OpenCVUtils() {
-
-    }
-
 
     /** 图片灰度化处理 */
     public Bitmap gray(Bitmap srcBitmap) {
@@ -55,27 +48,27 @@ public class OpenCVUtils {
             case 0:
                 dstMat = srcMat;
                 break;
-
             case 90:
                 Core.transpose(srcMat, dstMat);
                 break;
-
             case 180:
                 Core.flip(srcMat, dstMat, -1);
                 break;
-
             case 270:
                 Core.transpose(srcMat, dstMat);
                 Core.flip(srcMat, dstMat, 1);
                 break;
+            default:
+                Log.i(TAG, "rotate: 旋转的度数应该为90度的倍数");
+                return null;
         }
         Utils.matToBitmap(dstMat, dstBitmap);
         return dstBitmap;
     }
 
 
+    /** 图像裁剪 */
     public Bitmap crop(Bitmap srcBitmap, Rect rect) {
-
         if (srcBitmap == null || rect == null) {
             Log.e(TAG, "crop:   params is null!!!");
             return null;
@@ -94,12 +87,10 @@ public class OpenCVUtils {
             rect.bottom = srcBitmap.getHeight();
         }
 
-        Mat srcMat = new Mat();
-        Mat cropMat = new Mat();
         Bitmap cropBitmap = Bitmap.createBitmap(rect.width(), rect.height(), Bitmap.Config.RGB_565);
-
+        Mat srcMat = new Mat();
         Utils.bitmapToMat(srcBitmap, srcMat);
-//        cropMat = srcMat(new Range(rect.top, rect.bottom), new Range(rect.left, rect.right));
+        Mat cropMat = new Mat(srcMat, new Range(rect.top, rect.bottom), new Range(rect.left, rect.right));
         Utils.matToBitmap(cropMat, cropBitmap);
 
         return cropBitmap;
@@ -123,20 +114,46 @@ public class OpenCVUtils {
     }
 
 
-//    /** yuv转rgb数组， nv21类型(not test) */
-//    public byte[] yuv2rgb(byte[] yuv, int width, int height) {
-//        byte[] rgb = new byte[width * height * 3];
-//
-//        Mat yuvMat = new Mat();
-//        Mat rgbMat = new Mat();
-//
-//        yuvMat.put(0, 0, yuv);
-//        Imgproc.cvtColor(yuvMat, rgbMat, Imgproc.COLOR_YUV2BGR_NV21);
-//
-//        rgbMat.get(0, 0, rgb);
-//
-//        return rgb;
-//    }
+    /** 方框滤波 */
+    public Bitmap boxFilter(Bitmap srcBitmap, int depth, Size size) {
+        Mat srcMat = new Mat();
+        Mat dstMat = new Mat();
+        Bitmap bitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.RGB_565);
 
+        Utils.bitmapToMat(srcBitmap, srcMat);
+        Imgproc.boxFilter(srcMat, dstMat, depth, size);
+
+        Utils.matToBitmap(dstMat, bitmap);
+
+        return bitmap;
+    }
+
+
+    /** 均值滤波 */
+    public Bitmap blur(Bitmap srcBitmap, Size size) {
+        Mat srcMat = new Mat();
+        Mat dstMat = new Mat();
+        Bitmap bitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.RGB_565);
+
+        Utils.bitmapToMat(srcBitmap, srcMat);
+        Imgproc.blur(srcMat, dstMat, size);
+
+        Utils.matToBitmap(dstMat, bitmap);
+
+        return bitmap;
+    }
+
+    /** 高斯滤波 */
+    public Bitmap gaussianBlur(Bitmap srcBitmap, Size size) {
+        Mat srcMat = new Mat();
+        Mat dstMat = new Mat();
+        Bitmap bitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.RGB_565);
+
+        Utils.bitmapToMat(srcBitmap, srcMat);
+        Imgproc.GaussianBlur(srcMat, dstMat, size, 0);
+        Utils.matToBitmap(dstMat, bitmap);
+
+        return bitmap;
+    }
 
 }
