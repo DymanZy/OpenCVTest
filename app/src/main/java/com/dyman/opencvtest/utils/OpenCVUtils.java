@@ -143,6 +143,7 @@ public class OpenCVUtils {
         return bitmap;
     }
 
+
     /** 高斯滤波 */
     public Bitmap gaussianBlur(Bitmap srcBitmap, Size size) {
         Mat srcMat = new Mat();
