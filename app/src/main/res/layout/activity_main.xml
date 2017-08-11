@@ -28,17 +28,17 @@
             android:id="@+id/showGray_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="显示灰度图"/>
+            android:text="人脸检测"/>
         <Button
             android:id="@+id/rotateImage_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="图像滤波"/>
+            android:text="滤波"/>
         <Button
             android:id="@+id/resizeImage_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="缩放图片"/>
+            android:text="边缘检测"/>
     </LinearLayout>
 
     <ImageView

@@ -2,7 +2,6 @@ package com.dyman.opencvtest;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,10 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.dyman.opencvtest.utils.CvFaceUtils;
 import com.dyman.opencvtest.utils.OpenCVUtils;
 
 import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Size;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -28,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView showImageIv;
 
     private OpenCVUtils cvUtils;
+    private CvFaceUtils cvFaceUtils;
 
 
     static {
@@ -44,13 +44,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         cvUtils = new OpenCVUtils();
+        cvFaceUtils = new CvFaceUtils(this);
 
         initView();
     }
 
 
     private void initView() {
-        srcBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+        srcBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.face);
 
         showSrcBtn = (Button) findViewById(R.id.showSrc_btn);
         showGrayBtn = (Button) findViewById(R.id.showGray_btn);
@@ -74,21 +75,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.showGray_btn:
-                Toast.makeText(MainActivity.this, "显示灰度图", Toast.LENGTH_SHORT).show();
-                showImageIv.setImageBitmap(cvUtils.gray(srcBitmap));
+                Toast.makeText(MainActivity.this, "人脸检测", Toast.LENGTH_SHORT).show();
+                long time = System.currentTimeMillis();
+                Bitmap faceBitmap = cvFaceUtils.faceDetect(srcBitmap);
+                Log.i(TAG, "onClick:    人脸检测耗时： "+(System.currentTimeMillis() - time));
+                showImageIv.setImageBitmap(faceBitmap);
                 break;
 
             case R.id.rotateImage_btn:
                 Toast.makeText(MainActivity.this, "图像裁剪", Toast.LENGTH_SHORT).show();
-                Point mid = new Point(srcBitmap.getWidth()/2, srcBitmap.getHeight()/2);
-                android.graphics.Rect rect = new android.graphics.Rect(mid.x-150, mid.y-150, mid.x+150, mid.y+150);
-                showImageIv.setImageBitmap(cvUtils.crop(srcBitmap,rect));
+                showImageIv.setImageBitmap(cvUtils.advantagedCanny(srcBitmap));
                 break;
 
             case  R.id.resizeImage_btn:
-                Toast.makeText(MainActivity.this, "图像滤波", Toast.LENGTH_SHORT).show();
-                Size size = new Size(15, 15);
-                showImageIv.setImageBitmap(cvUtils.gaussianBlur(srcBitmap, size));
+                Toast.makeText(MainActivity.this, "边缘检测", Toast.LENGTH_SHORT).show();
+                showImageIv.setImageBitmap(cvUtils.simpleCanny(srcBitmap));
                 break;
         }
     }
