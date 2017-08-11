@@ -157,4 +157,34 @@ public class OpenCVUtils {
         return bitmap;
     }
 
+
+    /** 简单的Canny边缘检测 */
+    public Bitmap simpleCanny(Bitmap srcBitmap) {
+        Mat srcMat = new Mat();
+        Mat dstMat = new Mat();
+        Bitmap bitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.RGB_565);
+
+        Utils.bitmapToMat(srcBitmap, srcMat);
+        Imgproc.Canny(srcMat, dstMat, 100, 100);
+        Utils.matToBitmap(dstMat, bitmap);
+
+        return bitmap;
+    }
+
+    /** 高级的Canny边缘检测 */
+    public Bitmap advantagedCanny(Bitmap srcBitmap) {
+        Mat srcMat = new Mat();
+        Mat edgeMat = new Mat();
+        Mat grayMat = new Mat();
+        Bitmap bitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.RGB_565);
+
+        Utils.bitmapToMat(srcBitmap, srcMat);
+        Imgproc.cvtColor(srcMat, grayMat, Imgproc.COLOR_RGB2GRAY);
+        Imgproc.blur(grayMat, edgeMat, new Size(3,3));
+        Imgproc.Canny(srcMat, edgeMat, 100, 200);
+        Utils.matToBitmap(edgeMat, bitmap);
+
+        return bitmap;
+    }
+
 }
