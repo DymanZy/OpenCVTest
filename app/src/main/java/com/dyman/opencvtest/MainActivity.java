@@ -1,5 +1,6 @@
 package com.dyman.opencvtest;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,8 +13,11 @@ import android.widget.Toast;
 
 import com.dyman.opencvtest.utils.CvFaceUtils;
 import com.dyman.opencvtest.utils.OpenCVUtils;
+import com.dyman.opencvtest.utils.Scanner;
+import com.dyman.opencvtest.view.CropImageView;
 
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Point;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -24,10 +28,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button showGrayBtn;
     private Button rotateBitmapBtn;
     private Button resizeBitmapBtn;
+    private CropImageView cropImageIv;
     private ImageView showImageIv;
 
     private OpenCVUtils cvUtils;
     private CvFaceUtils cvFaceUtils;
+    private Bitmap bitmap;
+    private Scanner mScanner;
 
 
     static {
@@ -52,17 +59,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         srcBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.face);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.test_card);
 
         showSrcBtn = (Button) findViewById(R.id.showSrc_btn);
         showGrayBtn = (Button) findViewById(R.id.showGray_btn);
         rotateBitmapBtn = (Button) findViewById(R.id.rotateImage_btn);
         resizeBitmapBtn = (Button) findViewById(R.id.resizeImage_btn);
         showImageIv = (ImageView) findViewById(R.id.showImage_iv);
+        cropImageIv = (CropImageView) findViewById(R.id.cropImage_iv);
 
         showSrcBtn.setOnClickListener(this);
         showGrayBtn.setOnClickListener(this);
         rotateBitmapBtn.setOnClickListener(this);
         resizeBitmapBtn.setOnClickListener(this);
+
+        showImageIv.setImageBitmap(bitmap);
+        if (bitmap != null) {
+            cropImageIv.setImageToCrop(bitmap);
+        }
     }
 
 
@@ -70,8 +84,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.showSrc_btn:
-                Toast.makeText(MainActivity.this, "显示原图", Toast.LENGTH_SHORT).show();
-                showImageIv.setImageBitmap(srcBitmap);
+                Toast.makeText(MainActivity.this, "扫描选区", Toast.LENGTH_SHORT).show();
+                mScanner = new Scanner(bitmap);
+                android.graphics.Point[] scanPoint = mScanner.scanPoint();
+                for (android.graphics.Point point : scanPoint) {
+                    Log.i(TAG, "--------------- 扫描出的坐标： x="+point.x+"   y="+point.y);
+                }
+
                 break;
 
             case R.id.showGray_btn:
