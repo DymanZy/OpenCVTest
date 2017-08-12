@@ -53,7 +53,7 @@ public class Scanner {
         //  提取边框
         Imgproc.findContours(scanImage, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 
-        //  按面积排序
+        //  按面积排序，最后只取面积最大的那个
         Collections.sort(contours, new Comparator<MatOfPoint>() {
             @Override
             public int compare(MatOfPoint matOfPoint1, MatOfPoint matOfPoint2) {
@@ -62,7 +62,6 @@ public class Scanner {
                 return Double.compare(twoArea, oneArea);
             }
         });
-
 
         Point[] resultArr = new Point[4];
         if (contours.size() > 0) {
@@ -75,30 +74,20 @@ public class Scanner {
             //  筛选去除相近的点
             MatOfPoint2f selectMat = selectPoint(outDpMat, 1);
 
-            //test
-            Point[] points = selectMat.toArray();
-            for (Point p : points) {
-                Log.i(TAG, "sortPointClockwise: ------------待处理的点： x="+p.x+"    y="+p.y);
-            }
-
             if (selectMat.toArray().length != 4) {
+                //  不是四边形，使用最小矩形包裹
                 RotatedRect rotatedRect = Imgproc.minAreaRect(selectMat);
-                Point[] p = new Point[4];
-                rotatedRect.points(p);
-                resultArr = p;
+                rotatedRect.points(resultArr);
             } else {
                 resultArr = selectMat.toArray();
             }
-
+            //  比例还原
             for (Point p : resultArr) {
                 p.x *= resizeScale;
                 p.y *= resizeScale;
             }
-
-            for (Point p : resultArr) {
-                Log.i(TAG, "sortPointClockwise: ------------缩放还原处理后的点： x="+p.x+"    y="+p.y);
-            }
         }
+        //  对最终检测出的四个点进行排序：左上、右上、右下、坐下
         Point[] result = sortPointClockwise(resultArr);
         android.graphics.Point[] rs = new android.graphics.Point[result.length];
         for (int i = 0; i < result.length; i++) {
@@ -108,17 +97,19 @@ public class Scanner {
         return rs;
     }
 
-
+    /**
+     *  为避免处理时间过长，先对图片进行压缩
+     * @param image
+     * @return
+     */
     private Mat resizeImage(Mat image) {
         int width = image.cols();
         int height = image.rows();
-        Log.i(TAG, "resizeImage: ------------srcWidth="+width+"     srcHeight="+height);
         int maxSize = width > height ? width : height;
         if (maxSize > resizeThreshold) {
             resizeScale = 1.0f * maxSize / resizeThreshold;
             width = (int) (width / resizeScale);
             height = (int) (height / resizeScale);
-            Log.i(TAG, "resizeImage: ------------resizeWidth="+width+"     resizeHeight="+height);
             Size size = new Size(width, height);
             Mat resizeMat = new Mat();
             Imgproc.resize(image, resizeMat, size);
@@ -128,10 +119,15 @@ public class Scanner {
     }
 
 
+    /**
+     *  对图像进行预处理：灰度化、高斯模糊、Canny边缘检测
+     * @param image
+     * @return
+     */
     private Mat preProcessImage(Mat image) {
 
         Mat grayMat = new Mat();
-        Imgproc.cvtColor(image, grayMat, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(image, grayMat, Imgproc.COLOR_RGB2GRAY);   //  注意RGB和BGR，影响很大
 
         Mat blurMat = new Mat();
         Imgproc.GaussianBlur(grayMat, blurMat, new Size(5,5), 0);
@@ -184,7 +180,7 @@ public class Scanner {
         return outDpMat;
     }
 
-
+    /** 对顶点进行排序 */
     private Point[] sortPointClockwise(Point[] points) {
         if (points.length != 4) {
             return points;
