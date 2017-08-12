@@ -22,7 +22,7 @@
             android:id="@+id/showSrc_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="显示原图"/>
+            android:text="扫描选区"/>
 
         <Button
             android:id="@+id/showGray_btn"
@@ -41,9 +41,15 @@
             android:text="边缘检测"/>
     </LinearLayout>
 
+    <com.dyman.opencvtest.view.CropImageView
+        android:id="@+id/cropImage_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <ImageView
         android:id="@+id/showImage_iv"
         android:layout_width="match_parent"
-        android:layout_height="250dp"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 </LinearLayout>
