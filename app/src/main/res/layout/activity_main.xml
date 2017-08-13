@@ -10,47 +10,18 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.dyman.opencvtest.MainActivity">
+    tools:context="com.dyman.opencvtest.module.MainActivity">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
         <Button
-            android:id="@+id/showSrc_btn"
-            android:layout_width="wrap_content"
+            android:id="@+id/scanCrop_btn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="扫描选区"/>
+            android:text="扫描选区截图"/>
 
         <Button
-            android:id="@+id/showGray_btn"
-            android:layout_width="wrap_content"
+            android:id="@+id/faceDetect_btn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="人脸检测"/>
-        <Button
-            android:id="@+id/rotateImage_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="截取选区"/>
-        <Button
-            android:visibility="gone"
-            android:id="@+id/resizeImage_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="边缘检测"/>
-    </LinearLayout>
-
-    <com.dyman.opencvtest.view.CropImageView
-        android:id="@+id/cropImage_iv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <ImageView
-        android:id="@+id/showImage_iv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
 
 </LinearLayout>

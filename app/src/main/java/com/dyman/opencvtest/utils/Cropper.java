@@ -11,6 +11,8 @@ import org.opencv.imgproc.Imgproc;
 
 /**
  * Created by dyman on 2017/8/13.
+ *
+ *  截取选区并转换成矩形的帮助类
  */
 
 public class Cropper {

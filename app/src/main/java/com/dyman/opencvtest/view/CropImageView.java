@@ -25,7 +25,6 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 
 import com.dyman.opencvtest.R;
-import com.dyman.opencvtest.utils.CropUtils;
 import com.dyman.opencvtest.utils.Cropper;
 import com.dyman.opencvtest.utils.Scanner;
 
@@ -393,7 +392,7 @@ public class CropImageView extends ImageView {
             float cx = radius;
             int lineOffset = (int) dp2px(MAGNIFIER_BORDER_WIDTH);
             mMagnifierDrawable.setBounds(lineOffset, lineOffset, (int)radius * 2 - lineOffset, (int)radius * 2 - lineOffset);
-            double pointsDistance = CropUtils.getPointsDistance(draggingX, draggingY, 0, 0);
+            double pointsDistance = Cropper.getPointsDistance(draggingX, draggingY, 0, 0);
             if (pointsDistance < (radius * 2.5)) {
                 mMagnifierDrawable.setBounds(getWidth() - (int)radius * 2 + lineOffset, lineOffset, getWidth() - lineOffset, (int)radius * 2 - lineOffset);
                 cx = getWidth() - radius;

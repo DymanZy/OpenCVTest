@@ -1,11 +1,9 @@
 package com.dyman.opencvtest.utils;
 
 import android.graphics.Bitmap;
-import android.graphics.PointF;
 import android.util.Log;
 
 import org.opencv.android.Utils;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
@@ -18,24 +16,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Vector;
-import java.util.logging.Logger;
 
 /**
  * Created by dyman on 2017/8/12.
  *
- *  截图智能选区帮助类
+ *  智能选区帮助类
  */
 
 public class Scanner {
 
     private static final String TAG = "Scanner";
-
-
     private static int resizeThreshold = 500;
     private static float resizeScale = 1.0f;
 
 
+    /** 扫描图片，并返回检测到的矩形的四个顶点的坐标 */
     public static android.graphics.Point[] scanPoint(Bitmap srcBitmap) {
         Mat srcMat = new Mat();
         Utils.bitmapToMat(srcBitmap, srcMat);
@@ -62,6 +57,7 @@ public class Scanner {
 
         Point[] resultArr = new Point[4];
         if (contours.size() > 0) {
+            Log.i(TAG, "scanPoint: -------------contours.size="+contours.size());
             //  取面积最大的
             MatOfPoint2f contour2f = new MatOfPoint2f(contours.get(0).toArray());
             double arc = Imgproc.arcLength(contour2f, true);
@@ -254,6 +250,4 @@ public class Scanner {
         double y = point.y;
         return (x - x1)*(y2 - y1) - (y - y1)*(x2 - x1);
     }
-
-
 }

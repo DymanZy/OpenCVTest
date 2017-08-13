@@ -22,7 +22,7 @@ import java.io.InputStream;
 /**
  * Created by dyman on 2017/8/10.
  *
- *  基于OpenCV实现的人脸识别帮助类
+ *  基于OpenCV实现的人脸检测帮助类
  */
 
 public class CvFaceUtils {
@@ -34,6 +34,8 @@ public class CvFaceUtils {
     private File mCascadeFile;
     private CascadeClassifier ccf;
 
+
+    /** 初始化人脸检测帮助类，加载训练集合 */
     public CvFaceUtils(Context context) {
         this.mContext = context;
 
@@ -63,28 +65,28 @@ public class CvFaceUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    /** 对传入的图片进行人脸检测 */
     public Bitmap faceDetect(Bitmap srcBitmap) {
+        if (ccf == null) {
+            throw new IllegalArgumentException(" CascadeClassifier can not be null! Make sure your cascadeFile is available. ");
+        }
+
         Mat srcMat = new Mat();
         Mat grayMat = new Mat();
         MatOfRect faces = new MatOfRect();
         Bitmap bitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.RGB_565);
 
-
         Utils.bitmapToMat(srcBitmap, srcMat);
-        Imgproc.cvtColor(srcMat, grayMat, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.equalizeHist(grayMat, grayMat);
 
-        if (ccf == null) {
-            Log.i(TAG, "faceDetect:        ccf为空！！！！！！");
-            return null;
-        }
-        ccf.detectMultiScale(grayMat, faces);
+        Imgproc.cvtColor(srcMat, grayMat, Imgproc.COLOR_BGR2GRAY);  //灰度化处理
+        Imgproc.equalizeHist(grayMat, grayMat); //直方图均衡化，增强图像的对比度
+        ccf.detectMultiScale(grayMat, faces);   //人脸检测
+
         Rect[] facesArray = faces.toArray();
-        Log.i(TAG, "faceDetect:     检测到的人脸数："+facesArray.length);
         for (int i = 0; i < facesArray.length; i++) {
+            //绘制人脸画框
             Core.rectangle(srcMat, facesArray[i].tl(), facesArray[i].br(), FACE_RECT_COLOR, 3);
         }
 
