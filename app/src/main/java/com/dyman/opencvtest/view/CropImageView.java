@@ -82,8 +82,6 @@ public class CropImageView extends ImageView {
     boolean mShowGuideLine = true; // 是否显示辅助线
     boolean mShowMagnifier = true;// 是否显示放大镜
 
-    private Scanner mScanner;
-
     public CropImageView(Context context) {
         this(context, null);
     }
@@ -158,9 +156,8 @@ public class CropImageView extends ImageView {
      * @param bmp
      */
     public void setImageToCrop(Bitmap bmp) {
-        mScanner = new Scanner(bmp);
         setImageBitmap(bmp);
-        setCropPoints(mScanner.scanPoint());
+        setCropPoints(Scanner.scanPoint(bmp));
     }
 
     /**

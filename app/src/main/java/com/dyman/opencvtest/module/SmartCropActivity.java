@@ -1,4 +1,4 @@
-package com.dyman.opencvtest;
+package com.dyman.opencvtest.module;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,9 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.dyman.opencvtest.R;
 import com.dyman.opencvtest.utils.Scanner;
-
-import org.opencv.core.Point;
 
 public class SmartCropActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -23,13 +22,11 @@ public class SmartCropActivity extends AppCompatActivity implements View.OnClick
     private ImageView showIv;
 
     private Bitmap bitmap;
-    private Scanner mScanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_smart_crop);
-
         initView();
     }
 
@@ -53,6 +50,10 @@ public class SmartCropActivity extends AppCompatActivity implements View.OnClick
         switch (view.getId()) {
             case R.id.scan_btn:
                 Toast.makeText(SmartCropActivity.this, "扫描选区", Toast.LENGTH_SHORT).show();
+                android.graphics.Point[] points = Scanner.scanPoint(bitmap);
+                for (android.graphics.Point point : points) {
+                    Log.i(TAG, "onClick: -------------- x="+point.x+"   y="+point.y);
+                }
                 break;
 
             case R.id.crop_btn:

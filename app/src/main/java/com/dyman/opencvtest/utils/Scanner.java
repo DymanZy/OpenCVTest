@@ -32,17 +32,14 @@ public class Scanner {
     private static final String TAG = "Scanner";
 
 
-    private int resizeThreshold = 500;
-    private Mat srcMat;
-    private float resizeScale = 1.0f;
+    private static int resizeThreshold = 500;
+    private static float resizeScale = 1.0f;
 
-    public Scanner(Bitmap srcBitmap) {
-        srcMat = new Mat();
+
+    public static android.graphics.Point[] scanPoint(Bitmap srcBitmap) {
+        Mat srcMat = new Mat();
         Utils.bitmapToMat(srcBitmap, srcMat);
-    }
 
-
-    public android.graphics.Point[] scanPoint() {
         //  图像缩放
         Mat image = resizeImage(srcMat);
         //  图像预处理
@@ -102,7 +99,7 @@ public class Scanner {
      * @param image
      * @return
      */
-    private Mat resizeImage(Mat image) {
+    private static Mat resizeImage(Mat image) {
         int width = image.cols();
         int height = image.rows();
         int maxSize = width > height ? width : height;
@@ -124,7 +121,7 @@ public class Scanner {
      * @param image
      * @return
      */
-    private Mat preProcessImage(Mat image) {
+    private static Mat preProcessImage(Mat image) {
 
         Mat grayMat = new Mat();
         Imgproc.cvtColor(image, grayMat, Imgproc.COLOR_RGB2GRAY);   //  注意RGB和BGR，影响很大
@@ -143,7 +140,7 @@ public class Scanner {
 
 
     /** 过滤掉距离相近的点 */
-    private MatOfPoint2f selectPoint(MatOfPoint2f outDpMat, int selectTimes) {
+    private static MatOfPoint2f selectPoint(MatOfPoint2f outDpMat, int selectTimes) {
         List<Point> pointList = new ArrayList<>();
         pointList.addAll(outDpMat.toList());
         if (pointList.size() > 4) {
@@ -182,7 +179,7 @@ public class Scanner {
     }
 
     /** 对顶点进行排序 */
-    private Point[] sortPointClockwise(Point[] points) {
+    private static Point[] sortPointClockwise(Point[] points) {
         if (points.length != 4) {
             return points;
         }
@@ -248,7 +245,7 @@ public class Scanner {
     }
 
 
-    private double pointSideLine(Point lineP1, Point lineP2, Point point) {
+    private static double pointSideLine(Point lineP1, Point lineP2, Point point) {
         double x1 = lineP1.x;
         double y1 = lineP1.y;
         double x2 = lineP2.x;
