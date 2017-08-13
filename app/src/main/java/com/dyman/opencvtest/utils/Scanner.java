@@ -142,6 +142,7 @@ public class Scanner {
     }
 
 
+    /** 过滤掉距离相近的点 */
     private MatOfPoint2f selectPoint(MatOfPoint2f outDpMat, int selectTimes) {
         List<Point> pointList = new ArrayList<>();
         pointList.addAll(outDpMat.toList());
@@ -256,5 +257,6 @@ public class Scanner {
         double y = point.y;
         return (x - x1)*(y2 - y1) - (y - y1)*(x2 - x1);
     }
+
 
 }

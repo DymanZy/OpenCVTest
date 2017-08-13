@@ -26,6 +26,7 @@ import android.widget.ImageView;
 
 import com.dyman.opencvtest.R;
 import com.dyman.opencvtest.utils.CropUtils;
+import com.dyman.opencvtest.utils.Cropper;
 import com.dyman.opencvtest.utils.Scanner;
 
 
@@ -259,22 +260,22 @@ public class CropImageView extends ImageView {
      * 裁剪
      * @return 裁剪后的图片
      */
-//    public Bitmap crop() {
-//        return crop(mCropPoints);
-//    }
+    public Bitmap crop() {
+        return crop(mCropPoints);
+    }
 
     /**
      * 使用自定义选区裁剪
      * @param points 大小为4
      * @return 裁剪后的图片
      */
-//    public Bitmap crop(Point[] points) {
-//        if (!checkPoints(points)) {
-//            return null;
-//        }
-//        Bitmap bmp = getBitmap();
-//        return bmp == null ? null : SmartCropper.crop(bmp, points);
-//    }
+    public Bitmap crop(Point[] points) {
+        if (!checkPoints(points)) {
+            return null;
+        }
+        Bitmap bmp = getBitmap();
+        return bmp == null ? null : Cropper.crop(bmp, points);
+    }
 
     /**
      * 选区是否为凸四边形

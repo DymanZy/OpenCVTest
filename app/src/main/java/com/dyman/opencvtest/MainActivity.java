@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         srcBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.face);
         bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.test_card);
 
+
         showSrcBtn = (Button) findViewById(R.id.showSrc_btn);
         showGrayBtn = (Button) findViewById(R.id.showGray_btn);
         rotateBitmapBtn = (Button) findViewById(R.id.rotateImage_btn);
@@ -85,12 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.showSrc_btn:
                 Toast.makeText(MainActivity.this, "扫描选区", Toast.LENGTH_SHORT).show();
-                mScanner = new Scanner(bitmap);
-                android.graphics.Point[] scanPoint = mScanner.scanPoint();
-                for (android.graphics.Point point : scanPoint) {
-                    Log.i(TAG, "--------------- 扫描出的坐标： x="+point.x+"   y="+point.y);
-                }
-
+                cropImageIv.setImageToCrop(bitmap);
                 break;
 
             case R.id.showGray_btn:
@@ -102,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.rotateImage_btn:
-                Toast.makeText(MainActivity.this, "图像裁剪", Toast.LENGTH_SHORT).show();
-                showImageIv.setImageBitmap(cvUtils.advantagedCanny(srcBitmap));
+                Toast.makeText(MainActivity.this, "截取选区", Toast.LENGTH_SHORT).show();
+                cropImageIv.setImageBitmap(cropImageIv.crop());
                 break;
 
             case  R.id.resizeImage_btn:
