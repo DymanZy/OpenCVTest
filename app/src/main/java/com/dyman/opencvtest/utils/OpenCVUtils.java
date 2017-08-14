@@ -1,14 +1,18 @@
 package com.dyman.opencvtest.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.util.Log;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 import org.opencv.core.Range;
 import org.opencv.core.Size;
+import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -98,7 +102,7 @@ public class OpenCVUtils {
 
 
     /** 图像缩放 */
-    public Bitmap resize(Bitmap srcBitmap, float zoomScale) {
+    public static Bitmap resize(Bitmap srcBitmap, float zoomScale) {
 
         Mat srcMat = new Mat();
         Mat dstMat = new Mat();
@@ -185,6 +189,54 @@ public class OpenCVUtils {
         Utils.matToBitmap(edgeMat, bitmap);
 
         return bitmap;
+    }
+
+
+    public static Bitmap yuv2Bitmap(byte[] yuvData, int width, int height, int rotate) {
+        Mat yuvMat = new Mat((int) (height * 1.5), width, CvType.CV_8UC1);
+        Mat bgrMat = new Mat(height, width, CvType.CV_8UC3);
+        yuvMat.put(0, 0, yuvData);
+
+        Imgproc.cvtColor(yuvMat, bgrMat, Imgproc.COLOR_YUV2RGB_NV21);
+
+        Mat dstMat = rotate(bgrMat, rotate);
+
+        Bitmap bitmap = Bitmap.createBitmap(dstMat.cols(), dstMat.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(dstMat, bitmap);
+        return bitmap;
+    }
+
+
+    private static Mat rotate(Mat srcMat, int rotate) {
+        Mat dstMat;
+        switch (rotate) {
+            case 0:
+                dstMat = new Mat(srcMat.rows(), srcMat.cols(), CvType.CV_8UC3);
+                dstMat = srcMat;
+                break;
+
+            case 90:
+                dstMat = new Mat(srcMat.cols(), srcMat.rows(), CvType.CV_8UC3);
+                Core.transpose(srcMat, dstMat);
+                Core.flip(dstMat, dstMat, 1);   //  手机后置摄像头需要再镜像翻转一次
+                break;
+
+            case 180:
+                dstMat = new Mat(srcMat.rows(), srcMat.cols(), CvType.CV_8UC3);
+                Core.flip(srcMat, dstMat, -1);
+                break;
+
+            case 270:
+                dstMat = new Mat(srcMat.cols(), srcMat.rows(), CvType.CV_8UC3);
+                Core.transpose(srcMat, dstMat);
+                Core.flip(srcMat, dstMat, 1);
+                break;
+
+            default:
+                throw new IllegalArgumentException("rotate: 旋转的度数应该为90度的倍数");
+        }
+
+        return dstMat;
     }
 
 }

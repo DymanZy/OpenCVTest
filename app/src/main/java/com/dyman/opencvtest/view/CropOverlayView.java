@@ -32,7 +32,7 @@ import com.dyman.opencvtest.utils.Scanner;
 /**
  * Created by qiulinmin on 8/2/17.
  */
-public class CropImageView extends ImageView {
+public class CropOverlayView extends ImageView {
 
     private static final String TAG = "CropImageView";
 
@@ -81,15 +81,15 @@ public class CropImageView extends ImageView {
     boolean mShowGuideLine = true; // 是否显示辅助线
     boolean mShowMagnifier = true;// 是否显示放大镜
 
-    public CropImageView(Context context) {
+    public CropOverlayView(Context context) {
         this(context, null);
     }
 
-    public CropImageView(Context context, AttributeSet attrs) {
+    public CropOverlayView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CropImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CropOverlayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         ScaleType scaleType = getScaleType();
         if (scaleType == ScaleType.FIT_END || scaleType == ScaleType.FIT_START || scaleType == ScaleType.MATRIX) {

@@ -33,6 +33,8 @@
         </activity>
         <activity android:name=".module.SmartCropActivity">
         </activity>
+        <activity android:name=".module.FaceDetectActivity">
+        </activity>
     </application>
 
 </manifest>

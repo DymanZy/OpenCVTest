@@ -39,7 +39,7 @@
         android:layout_margin="10dp"
         android:layout_below="@+id/scan_btn"/>
 
-    <com.dyman.opencvtest.view.CropImageView
+    <com.dyman.opencvtest.view.CropOverlayView
         android:id="@+id/cropImage_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

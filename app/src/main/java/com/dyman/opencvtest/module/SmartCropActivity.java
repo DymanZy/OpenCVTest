@@ -12,16 +12,13 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dyman.opencvtest.R;
-import com.dyman.opencvtest.utils.Scanner;
-import com.dyman.opencvtest.view.CropImageView;
+import com.dyman.opencvtest.view.CropOverlayView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,7 +32,7 @@ public class SmartCropActivity extends AppCompatActivity implements View.OnClick
     private Button chooseBtn;
     private Button scanBtn;
     private Button cropBtn;
-    private CropImageView cropImageIv;
+    private CropOverlayView cropImageIv;
     private ImageView showImageIv;
 
     private Bitmap bitmap;
@@ -55,7 +52,7 @@ public class SmartCropActivity extends AppCompatActivity implements View.OnClick
         scanBtn = (Button) findViewById(R.id.scan_btn);
         cropBtn = (Button) findViewById(R.id.crop_btn);
         showImageIv = (ImageView) findViewById(R.id.showImage_iv);
-        cropImageIv = (CropImageView) findViewById(R.id.cropImage_iv);
+        cropImageIv = (CropOverlayView) findViewById(R.id.cropImage_iv);
 
         chooseBtn.setOnClickListener(this);
         scanBtn.setOnClickListener(this);
@@ -93,6 +90,7 @@ public class SmartCropActivity extends AppCompatActivity implements View.OnClick
     }
 
 
+    /** 显示选择图片的对话框 */
     private void showChooseDialog(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setItems(new CharSequence[]{"打开相机", "打开相册"}, new DialogInterface.OnClickListener() {
@@ -169,6 +167,7 @@ public class SmartCropActivity extends AppCompatActivity implements View.OnClick
     }
 
 
+    /** 计算图片适合显示的大小 */
     private int calculateSampleSize(BitmapFactory.Options options) {
         int outHeight = options.outHeight;
         int outWidth = options.outWidth;

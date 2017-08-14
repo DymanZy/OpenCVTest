@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(MainActivity.this, SmartCropActivity.class));
                 break;
             case R.id.faceDetect_btn:
-
+                startActivity(new Intent(MainActivity.this, FaceDetectActivity.class));
                 break;
         }
     }
