@@ -12,16 +12,18 @@
     android:orientation="vertical"
     tools:context="com.dyman.opencvtest.module.MainActivity">
 
-        <Button
-            android:id="@+id/scanCrop_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="扫描选区截图"/>
+    <Button
+        android:id="@+id/scanCrop_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="扫描选区截图"/>
 
-        <Button
-            android:id="@+id/faceDetect_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="人脸检测"/>
+    <Button
+        android:id="@+id/faceDetect_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="人脸检测"/>
 
 </LinearLayout>

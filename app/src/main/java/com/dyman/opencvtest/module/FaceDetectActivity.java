@@ -32,7 +32,6 @@ public class FaceDetectActivity extends Activity implements SurfaceHolder.Callba
 
     private SurfaceView mSurfaceView;
     private FaceOverlayView mOverlay;
-    private ImageView showImageIv;
 
     private Camera mCamera; // 摄像头
     private int previewWidth, previewHeight;
@@ -59,7 +58,6 @@ public class FaceDetectActivity extends Activity implements SurfaceHolder.Callba
     private void initView() {
         mSurfaceView = findViewById(R.id.surfaceView_sv);
         mOverlay = findViewById(R.id.faceOverlay_fov);
-        showImageIv = findViewById(R.id.showImage_iv);
     }
 
 
@@ -169,7 +167,6 @@ public class FaceDetectActivity extends Activity implements SurfaceHolder.Callba
                     y - height/2,
                     x + width/2,
                     y + height/2);
-
         }
 
         mHandler.sendEmptyMessage(DRAW_FRAME);
