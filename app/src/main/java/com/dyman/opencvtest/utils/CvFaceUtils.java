@@ -2,6 +2,7 @@ package com.dyman.opencvtest.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.RectF;
 import android.util.Log;
 
 import com.dyman.opencvtest.R;
@@ -93,6 +94,38 @@ public class CvFaceUtils {
         Utils.matToBitmap(srcMat, bitmap);
 
         return bitmap;
+    }
+
+
+    /** 对传入的图片进行人脸检测 */
+    public android.graphics.Rect[] getFaceRect(Bitmap srcBitmap) {
+        if (ccf == null) {
+            throw new IllegalArgumentException(" CascadeClassifier can not be null! Make sure your cascadeFile is available. ");
+        }
+
+        android.graphics.Rect[] rects;
+        Mat srcMat = new Mat();
+        Mat grayMat = new Mat();
+        MatOfRect faces = new MatOfRect();
+        Utils.bitmapToMat(srcBitmap, srcMat);
+
+        Imgproc.cvtColor(srcMat, grayMat, Imgproc.COLOR_BGR2GRAY);  //灰度化处理
+        Imgproc.equalizeHist(grayMat, grayMat); //直方图均衡化，增强图像的对比度
+        ccf.detectMultiScale(grayMat, faces);   //人脸检测
+
+        Rect[] facesArray = faces.toArray();
+        rects = new android.graphics.Rect[facesArray.length];
+        for (int i = 0; i < facesArray.length; i++) {
+            int left = (int) facesArray[i].tl().x;
+            int top = (int) facesArray[i].tl().y;
+            int right = (int) facesArray[i].br().x;
+            int bottom = (int) facesArray[i].br().y;
+
+            android.graphics.Rect rect = new android.graphics.Rect(left, top, right, bottom);
+            rects[i] = rect;
+        }
+
+        return rects;
     }
 
 }

@@ -76,6 +76,11 @@ public class FaceOverlayView extends View{
     }
 
 
+    public void setFront(boolean front) {
+        this.isFront = front;
+    }
+
+
     public void setFaces(Rect[] faces) {
         this.faces = faces;
         invalidate();
