@@ -8,9 +8,7 @@
 
 ### 智能选区截图
 
-<a href="img/opencv_paper_scan.png"><img src="img/opencv_paper_scan.png" width="40%"/></a>
-
-<a href="img/opencv_paper_crop.png"><img src="img/opencv_paper_crop.png" width="40%"/></a>
+<a href="img/opencv_paper_scan.png"><img src="img/opencv_paper_scan.png" width="40%"/></a> <a href="img/opencv_paper_crop.png"><img src="img/opencv_paper_crop.png" width="40%"/></a>
 
 
 
