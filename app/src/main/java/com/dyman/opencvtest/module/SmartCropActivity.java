@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.dyman.opencvtest.Globle;
 import com.dyman.opencvtest.R;
 import com.dyman.opencvtest.view.CropOverlayView;
 
@@ -26,8 +27,6 @@ import java.io.FileNotFoundException;
 public class SmartCropActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = SmartCropActivity.class.getSimpleName();
-    private static final int REQUEST_OPEN_ALBUM = 100;
-    private static final int REQUEST_OPEN_CAMERA = 200;
 
     private Button chooseBtn;
     private Button scanBtn;
@@ -102,7 +101,7 @@ public class SmartCropActivity extends AppCompatActivity implements View.OnClick
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
                         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-                            startActivityForResult(cameraIntent, REQUEST_OPEN_CAMERA);
+                            startActivityForResult(cameraIntent, Globle.REQUEST_OPEN_CAMERA);
                         }
 
                         break;
@@ -111,7 +110,7 @@ public class SmartCropActivity extends AppCompatActivity implements View.OnClick
                         Intent albumIntent = new Intent(Intent.ACTION_PICK);
                         albumIntent.setType("image/*");
                         if (albumIntent.resolveActivity(getPackageManager()) != null) {
-                            startActivityForResult(albumIntent, REQUEST_OPEN_ALBUM);
+                            startActivityForResult(albumIntent, Globle.REQUEST_OPEN_ALBUM);
                         }
                         break;
                 }
@@ -137,14 +136,14 @@ public class SmartCropActivity extends AppCompatActivity implements View.OnClick
             return;
         }
         Bitmap selectedBitmap = null;
-        if (requestCode == REQUEST_OPEN_CAMERA && tempFile.exists()) {
+        if (requestCode == Globle.REQUEST_OPEN_CAMERA && tempFile.exists()) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(tempFile.getPath(), options);
             options.inJustDecodeBounds = false;
             options.inSampleSize = calculateSampleSize(options);
             selectedBitmap = BitmapFactory.decodeFile(tempFile.getPath(), options);
-        } else if (requestCode == REQUEST_OPEN_ALBUM && data != null && data.getData() != null) {
+        } else if (requestCode == Globle.REQUEST_OPEN_ALBUM && data != null && data.getData() != null) {
             ContentResolver cr = getContentResolver();
             Uri bmpUri = data.getData();
             try {

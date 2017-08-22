@@ -7,16 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.Rect;
 import android.hardware.Camera;
-import android.media.Image;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ImageView;
 
 import com.dyman.opencvtest.R;
 import com.dyman.opencvtest.utils.CvFaceUtils;
@@ -26,8 +23,8 @@ import com.dyman.opencvtest.view.FaceOverlayView;
 
 import java.util.List;
 
-public class FaceDetectActivity extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback{
-    private static final String TAG = "FaceDetectActivity";
+public class CameraFaceDetectActivity extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback{
+    private static final String TAG = "CameraFaceDetectActivity";
     private static final int DRAW_FRAME = 100;
 
     private SurfaceView mSurfaceView;
@@ -62,7 +59,7 @@ public class FaceDetectActivity extends Activity implements SurfaceHolder.Callba
 
 
     private void initData() {
-        mCvFaceUtils = new CvFaceUtils(FaceDetectActivity.this);
+        mCvFaceUtils = new CvFaceUtils(CameraFaceDetectActivity.this);
     }
 
 
@@ -105,7 +102,7 @@ public class FaceDetectActivity extends Activity implements SurfaceHolder.Callba
         mOverlay.setPreviewHeight(1920);
 
         if (mOverlay != null) {
-            if (isScreenOrientationPortrait(FaceDetectActivity.this)) {
+            if (isScreenOrientationPortrait(CameraFaceDetectActivity.this)) {
                 mOverlay.setDisplayOrientation(0);
             } else {
                 mOverlay.setDisplayOrientation(90);
@@ -185,7 +182,6 @@ public class FaceDetectActivity extends Activity implements SurfaceHolder.Callba
                     }
                     break;
             }
-
         }
     };
 
@@ -229,7 +225,7 @@ public class FaceDetectActivity extends Activity implements SurfaceHolder.Callba
         int ReqTmpWidth;
         int ReqTmpHeight;
         // 当屏幕为垂直的时候需要把宽高值进行调换，保证宽大于高
-        if (isScreenOrientationPortrait(FaceDetectActivity.this)) {
+        if (isScreenOrientationPortrait(CameraFaceDetectActivity.this)) {
             ReqTmpWidth = surfaceHeight;
             ReqTmpHeight = surfaceWidth;
         } else {
@@ -263,7 +259,7 @@ public class FaceDetectActivity extends Activity implements SurfaceHolder.Callba
 
     /** 设置摄像机画面的显示方向 */
     private void setDisplayOrientation() {
-        mDisplayRotation = ScreenUtil.getDisplayRotation(FaceDetectActivity.this);
+        mDisplayRotation = ScreenUtil.getDisplayRotation(CameraFaceDetectActivity.this);
         mDisplayOrientation = ScreenUtil.getDisplayOrientation(mDisplayRotation, 0);
 
         mCamera.setDisplayOrientation(mDisplayOrientation);

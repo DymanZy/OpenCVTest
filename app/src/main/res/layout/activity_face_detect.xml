@@ -5,7 +5,7 @@
     android:id="@+id/activity_face_detect"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dyman.opencvtest.module.FaceDetectActivity">
+    tools:context="com.dyman.opencvtest.module.CameraFaceDetectActivity">
 
     <SurfaceView
         android:id="@+id/surfaceView_sv"

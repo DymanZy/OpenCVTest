@@ -13,7 +13,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
     private Button scanCropBtn;
-    private Button faceDetectBtn;
+    private Button cameraFaceDetectBtn;
+    private Button albumFaceDetectBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +27,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         scanCropBtn = (Button) findViewById(R.id.scanCrop_btn);
-        faceDetectBtn = (Button) findViewById(R.id.faceDetect_btn);
+        cameraFaceDetectBtn = (Button) findViewById(R.id.faceDetect_camera_btn);
+        albumFaceDetectBtn = (Button) findViewById(R.id.faceDetect_album_btn);
 
         scanCropBtn.setOnClickListener(this);
-        faceDetectBtn.setOnClickListener(this);
+        cameraFaceDetectBtn.setOnClickListener(this);
+        albumFaceDetectBtn.setOnClickListener(this);
     }
 
 
@@ -39,9 +42,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.scanCrop_btn:
                 startActivity(new Intent(MainActivity.this, SmartCropActivity.class));
                 break;
-            case R.id.faceDetect_btn:
-                startActivity(new Intent(MainActivity.this, FaceDetectActivity.class));
+            case R.id.faceDetect_camera_btn:
+                startActivity(new Intent(MainActivity.this, CameraFaceDetectActivity.class));
+                break;
+            case R.id.faceDetect_album_btn:
+                startActivity(new Intent(MainActivity.this, AlbumFaceDetectActivity.class));
                 break;
         }
     }
+
 }

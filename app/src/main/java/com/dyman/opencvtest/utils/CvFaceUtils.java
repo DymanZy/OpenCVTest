@@ -2,7 +2,6 @@ package com.dyman.opencvtest.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.RectF;
 import android.util.Log;
 
 import com.dyman.opencvtest.R;
@@ -68,6 +67,7 @@ public class CvFaceUtils {
         }
     }
 
+
     /** 对传入的图片进行人脸检测 */
     public Bitmap faceDetect(Bitmap srcBitmap) {
         if (ccf == null) {
@@ -124,7 +124,6 @@ public class CvFaceUtils {
             android.graphics.Rect rect = new android.graphics.Rect(left, top, right, bottom);
             rects[i] = rect;
         }
-
         return rects;
     }
 
