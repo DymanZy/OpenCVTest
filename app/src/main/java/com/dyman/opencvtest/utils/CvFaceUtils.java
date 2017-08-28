@@ -6,18 +6,35 @@ import android.util.Log;
 
 import com.dyman.opencvtest.R;
 
+import org.bytedeco.javacpp.opencv_core;
+import org.bytedeco.javacpp.opencv_imgcodecs;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+
+import org.bytedeco.javacpp.opencv_core.IplImage;
+import org.bytedeco.javacpp.opencv_core.CvHistogram;
+
+import static org.bytedeco.javacpp.helper.opencv_imgproc.cvCalcHist;
+import static org.bytedeco.javacpp.opencv_core.CV_HIST_ARRAY;
+import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_COMP_CORREL;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_COMP_INTERSECT;
+import static org.bytedeco.javacpp.opencv_imgproc.cvCompareHist;
+import static org.bytedeco.javacpp.opencv_imgproc.cvNormalizeHist;
+
+import static org.opencv.highgui.Highgui.CV_LOAD_IMAGE_GRAYSCALE;
 
 /**
  * Created by dyman on 2017/8/10.
@@ -127,4 +144,53 @@ public class CvFaceUtils {
         return rects;
     }
 
+
+    public static boolean saveImage(Context context, Mat image, String fileName) {
+        Mat grayMat = new Mat();
+        Imgproc.cvtColor(image, grayMat, Imgproc.COLOR_BGR2GRAY);
+        Mat mat = new Mat();
+        Size size = new Size(100, 100);
+        Imgproc.resize(grayMat, mat, size);
+        return Highgui.imwrite(getFilePath(context, fileName), mat);
+    }
+
+
+    public static double compare(Context context, String fileName1, String fileName2) {
+
+        String pathFile1 = getFilePath(context, fileName1);
+        String pathFile2 = getFilePath(context, fileName2);
+        IplImage image1 = cvLoadImage(pathFile1, opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+        IplImage image2 = cvLoadImage(pathFile2, opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+        if (null == image1 || null == image2) {
+            return -1;
+        }
+
+        int l_bins = 256;
+        int hist_size[] = {l_bins};
+        float v_ranges[] = {0, 255};
+        float ranges[][] = {v_ranges};
+
+        opencv_core.IplImage imageArr1[] = {image1};
+        opencv_core.IplImage imageArr2[] = {image2};
+        CvHistogram histogram1 = CvHistogram.create(1, hist_size, opencv_core.CV_HIST_ARRAY, ranges, 1);
+        CvHistogram histogram2 = CvHistogram.create(1, hist_size, opencv_core.CV_HIST_ARRAY, ranges, 1);
+        cvCalcHist(imageArr1, histogram1, 0, null);
+        cvCalcHist(imageArr2, histogram2, 0, null);
+        cvNormalizeHist(histogram1, 100.0);
+        cvNormalizeHist(histogram2, 100.0);
+
+        double c1 = cvCompareHist(histogram1, histogram2, CV_COMP_CORREL) * 100;
+        double c2 = cvCompareHist(histogram1, histogram2, CV_COMP_INTERSECT);
+
+        return (c1+c2)/2;
+    }
+
+
+    private static String getFilePath(Context context, String fileName) {
+        if ("".equals(fileName) || fileName == null) {
+            return null;
+        }
+
+        return context.getApplicationContext().getFilesDir().getPath() + fileName + ".jpg";
+    }
 }
