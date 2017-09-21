@@ -24,7 +24,7 @@ import com.dyman.opencvtest.view.FaceOverlayView;
 import java.util.List;
 
 public class CameraFaceDetectActivity extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback{
-    private static final String TAG = "CameraFaceDetectActivity";
+    private static final String TAG = "CFDActivity";
     private static final int DRAW_FRAME = 100;
 
     private SurfaceView mSurfaceView;
@@ -151,7 +151,7 @@ public class CameraFaceDetectActivity extends Activity implements SurfaceHolder.
         Log.i(TAG, "onPreviewFrame: --------------------------- resize, 耗时：" + (System.currentTimeMillis() - time));
 
         time = System.currentTimeMillis();
-        faceRects = mCvFaceUtils.getFaceRect(resizeBmp);
+        faceRects = mCvFaceUtils.faceDetect(resizeBmp, 99);
         Log.i(TAG, "onPreviewFrame: --------------------------- getFaceRect, 耗时：" + (System.currentTimeMillis() - time));
 
         for (Rect rect : faceRects) {

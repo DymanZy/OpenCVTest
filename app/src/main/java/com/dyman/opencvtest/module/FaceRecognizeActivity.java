@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.dyman.opencvtest.view.FaceOverlayView;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class FaceRecognizeActivity extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback{
@@ -49,6 +51,8 @@ public class FaceRecognizeActivity extends Activity implements SurfaceHolder.Cal
 
     private CvFaceUtils mCvFaceUtils;
     private Rect[] faceRects;
+    private Bitmap faceCropOne = null;
+    private Bitmap faceCropTwo = null;
 
 
     @Override
@@ -71,6 +75,38 @@ public class FaceRecognizeActivity extends Activity implements SurfaceHolder.Cal
         faceOneIv = findViewById(R.id.faceOne_iv);
         faceTwoIv = findViewById(R.id.faceTwo_iv);
         confidenceTv = findViewById(R.id.confidence_tv);
+
+        cropFaceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (fullBitmap == null || faceRects.length == 0) {
+                    return;
+                }
+
+                //  截图人脸并保存
+                if (faceCropOne == null) {
+                    Log.e(TAG, "onClick: ------------ crop face one");
+                    faceCropOne = OpenCVUtils.crop(fullBitmap, faceRects[0]);
+                    faceOneIv.setImageBitmap(faceCropOne);
+                    CvFaceUtils.saveImage(FaceRecognizeActivity.this, faceCropOne, "faceCropOne");
+                } else if (faceCropTwo == null) {
+                    Log.e(TAG, "onClick: ------------ crop face two");
+                    faceCropTwo = OpenCVUtils.crop(fullBitmap, faceRects[0]);
+                    faceTwoIv.setImageBitmap(faceCropTwo);
+                    CvFaceUtils.saveImage(FaceRecognizeActivity.this, faceCropTwo, "faceCropTwo");
+
+                    double result = CvFaceUtils.compare(FaceRecognizeActivity.this, "faceCropOne", "faceCropTwo");
+                    Log.e(TAG, "onClick: ------------ confidence = " + result);
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    confidenceTv.setText("相似度：" + df.format(result));
+
+                } else {
+                    Log.e(TAG, "onClick: ------------ reset");
+                    faceCropOne = null;
+                    faceCropTwo = null;
+                }
+            }
+        });
     }
 
 
@@ -158,7 +194,7 @@ public class FaceRecognizeActivity extends Activity implements SurfaceHolder.Cal
 
         fullBitmap = OpenCVUtils.yuv2Bitmap(bytes, previewWidth, previewHeight, rotate);
         Bitmap resizeBmp = OpenCVUtils.resize(fullBitmap, zoomScale);
-        faceRects = mCvFaceUtils.getFaceRect(resizeBmp);
+        faceRects = mCvFaceUtils.faceDetect(resizeBmp, 1);
 
         for (Rect rect : faceRects) {
             int x = (int) (rect.centerX() / zoomScale);

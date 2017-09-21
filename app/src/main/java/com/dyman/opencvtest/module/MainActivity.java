@@ -1,5 +1,6 @@
 package com.dyman.opencvtest.module;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +10,13 @@ import android.widget.Button;
 import com.dyman.opencvtest.R;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends Activity implements View.OnClickListener{
     private static final String TAG = "MainActivity";
 
     private Button scanCropBtn;
     private Button cameraFaceDetectBtn;
     private Button albumFaceDetectBtn;
+    private Button faceRecognizeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +28,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void initView() {
-        scanCropBtn = (Button) findViewById(R.id.scanCrop_btn);
-        cameraFaceDetectBtn = (Button) findViewById(R.id.faceDetect_camera_btn);
-        albumFaceDetectBtn = (Button) findViewById(R.id.faceDetect_album_btn);
+        scanCropBtn = findViewById(R.id.scanCrop_btn);
+        cameraFaceDetectBtn = findViewById(R.id.faceDetect_camera_btn);
+        albumFaceDetectBtn = findViewById(R.id.faceDetect_album_btn);
+        faceRecognizeBtn = findViewById(R.id.faceRecognize_btn);
 
         scanCropBtn.setOnClickListener(this);
         cameraFaceDetectBtn.setOnClickListener(this);
         albumFaceDetectBtn.setOnClickListener(this);
+        faceRecognizeBtn.setOnClickListener(this);
     }
 
 
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.faceDetect_album_btn:
                 startActivity(new Intent(MainActivity.this, AlbumFaceDetectActivity.class));
+                break;
+            case R.id.faceRecognize_btn:
+                startActivity(new Intent(MainActivity.this, FaceRecognizeActivity.class));
                 break;
         }
     }
