@@ -72,7 +72,13 @@ public class OpenCVUtils {
 
 
     /** 图像裁剪 */
-    public Bitmap crop(Bitmap srcBitmap, Rect rect) {
+    public static Bitmap crop(Bitmap srcBitmap, Rect rect) {
+        return crop(null, srcBitmap, rect);
+    }
+
+
+    /** 图像裁剪(复用cropBitmap, 节省内存) */
+    public static Bitmap crop(Bitmap cropBitmap, Bitmap srcBitmap, Rect rect) {
         if (srcBitmap == null || rect == null) {
             Log.e(TAG, "crop:   params is null!!!");
             return null;
@@ -91,7 +97,10 @@ public class OpenCVUtils {
             rect.bottom = srcBitmap.getHeight();
         }
 
-        Bitmap cropBitmap = Bitmap.createBitmap(rect.width(), rect.height(), Bitmap.Config.RGB_565);
+        if (cropBitmap == null || cropBitmap.getWidth() != rect.width() || cropBitmap.getHeight() != rect.height()) {
+            cropBitmap = Bitmap.createBitmap(rect.width(), rect.height(), Bitmap.Config.RGB_565);
+        }
+
         Mat srcMat = new Mat();
         Utils.bitmapToMat(srcBitmap, srcMat);
         Mat cropMat = new Mat(srcMat, new Range(rect.top, rect.bottom), new Range(rect.left, rect.right));

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_face_recognise"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dyman.opencvtest.module.FaceRecognizeActivity">
+
+    <SurfaceView
+        android:id="@+id/surfaceView_sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.dyman.opencvtest.view.FaceOverlayView
+        android:id="@+id/faceOverlay_fov"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:id="@+id/cropFace_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="15dp"
+            android:text="截取头像"/>
+
+        <ImageView
+            android:id="@+id/faceOne_iv"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"/>
+
+        <ImageView
+            android:id="@+id/faceTwo_iv"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"/>
+
+        <TextView
+            android:id="@+id/confidence_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="相似度："
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

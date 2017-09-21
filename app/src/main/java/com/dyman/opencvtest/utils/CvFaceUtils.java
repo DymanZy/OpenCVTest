@@ -115,39 +115,84 @@ public class CvFaceUtils {
 
 
     /** 对传入的图片进行人脸检测 */
-    public android.graphics.Rect[] getFaceRect(Bitmap srcBitmap) {
+    public android.graphics.Rect[] faceDetect(Bitmap srcBitmap, int maxFaceNum) {
+        return faceDetect(srcBitmap, maxFaceNum, false);
+    }
+
+
+    public android.graphics.Rect[] faceDetect(Bitmap srcBitmap, int maxFaceNum, boolean specificDetection) {
         if (ccf == null) {
             throw new IllegalArgumentException(" CascadeClassifier can not be null! Make sure your cascadeFile is available. ");
+        }
+
+        Bitmap partialBmp = srcBitmap;
+        int fixedHeight = 0;
+        //  抛弃图片顶部和底部，只检测中间区域，提高检测速度
+        if (specificDetection) {
+            android.graphics.Rect rect = new android.graphics.Rect();
+            fixedHeight = srcBitmap.getHeight() / 5;
+            rect.left = 0;
+            rect.top = srcBitmap.getHeight() / 5;
+            rect.right = srcBitmap.getWidth();
+            rect.bottom = srcBitmap.getHeight() / 5 * 4;
+            partialBmp = OpenCVUtils.crop(partialBmp, srcBitmap, rect);
         }
 
         android.graphics.Rect[] rects;
         Mat srcMat = new Mat();
         Mat grayMat = new Mat();
         MatOfRect faces = new MatOfRect();
-        Utils.bitmapToMat(srcBitmap, srcMat);
+        Utils.bitmapToMat(partialBmp, srcMat);
 
         Imgproc.cvtColor(srcMat, grayMat, Imgproc.COLOR_BGR2GRAY);  //灰度化处理
         Imgproc.equalizeHist(grayMat, grayMat); //直方图均衡化，增强图像的对比度
         ccf.detectMultiScale(grayMat, faces);   //人脸检测
 
         Rect[] facesArray = faces.toArray();
-        rects = new android.graphics.Rect[facesArray.length];
-        for (int i = 0; i < facesArray.length; i++) {
+        facesArray = faceSortByArea(facesArray);
+
+        maxFaceNum = maxFaceNum < facesArray.length ? maxFaceNum : facesArray.length;
+        rects = new android.graphics.Rect[maxFaceNum];
+        for (int i = 0; i < maxFaceNum; i++) {
             int left = (int) facesArray[i].tl().x;
-            int top = (int) facesArray[i].tl().y;
+            int top = (int) facesArray[i].tl().y + fixedHeight;
             int right = (int) facesArray[i].br().x;
-            int bottom = (int) facesArray[i].br().y;
+            int bottom = (int) facesArray[i].br().y + fixedHeight;
 
             android.graphics.Rect rect = new android.graphics.Rect(left, top, right, bottom);
             rects[i] = rect;
+        }
+
+        if (partialBmp != null) {
+            partialBmp.recycle();
         }
         return rects;
     }
 
 
-    public static boolean saveImage(Context context, Mat image, String fileName) {
+    /** 按面积排序，从大到小 */
+    private Rect[] faceSortByArea(Rect[] faces) {
+        boolean hasChange = true;
+        for (int i = 0; i < faces.length && hasChange; i++) {
+            hasChange = false;
+            for (int j = faces.length - 2; j >= i ; j--) {
+                if (faces[j].area() < faces[j+1].area()) {
+                    hasChange = true;
+                    Rect temp = faces[j];
+                    faces[j] = faces[j+1];
+                    faces[j+1] = temp;
+                }
+            }
+        }
+        return faces;
+    }
+
+
+    public static boolean saveImage(Context context, Bitmap image, String fileName) {
+        Mat srcMat = new Mat();
+        Utils.bitmapToMat(image, srcMat);
         Mat grayMat = new Mat();
-        Imgproc.cvtColor(image, grayMat, Imgproc.COLOR_BGR2GRAY);
+        Imgproc.cvtColor(srcMat, grayMat, Imgproc.COLOR_BGR2GRAY);
         Mat mat = new Mat();
         Size size = new Size(100, 100);
         Imgproc.resize(grayMat, mat, size);
@@ -157,32 +202,37 @@ public class CvFaceUtils {
 
     public static double compare(Context context, String fileName1, String fileName2) {
 
-        String pathFile1 = getFilePath(context, fileName1);
-        String pathFile2 = getFilePath(context, fileName2);
-        IplImage image1 = cvLoadImage(pathFile1, opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-        IplImage image2 = cvLoadImage(pathFile2, opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-        if (null == image1 || null == image2) {
-            return -1;
+        try {
+            String pathFile1 = getFilePath(context, fileName1);
+            String pathFile2 = getFilePath(context, fileName2);
+            IplImage image1 = cvLoadImage(pathFile1, opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+            IplImage image2 = cvLoadImage(pathFile2, opencv_imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+            if (null == image1 || null == image2) {
+                return -1;
+            }
+
+            int l_bins = 256;
+            int hist_size[] = {l_bins};
+            float v_ranges[] = {0, 255};
+            float ranges[][] = {v_ranges};
+
+            opencv_core.IplImage imageArr1[] = {image1};
+            opencv_core.IplImage imageArr2[] = {image2};
+            CvHistogram histogram1 = CvHistogram.create(1, hist_size, opencv_core.CV_HIST_ARRAY, ranges, 1);
+            CvHistogram histogram2 = CvHistogram.create(1, hist_size, opencv_core.CV_HIST_ARRAY, ranges, 1);
+            cvCalcHist(imageArr1, histogram1, 0, null);
+            cvCalcHist(imageArr2, histogram2, 0, null);
+            cvNormalizeHist(histogram1, 100.0);
+            cvNormalizeHist(histogram2, 100.0);
+
+            double c1 = cvCompareHist(histogram1, histogram2, CV_COMP_CORREL) * 100;
+            double c2 = cvCompareHist(histogram1, histogram2, CV_COMP_INTERSECT);
+
+            return (c1+c2)/2;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        int l_bins = 256;
-        int hist_size[] = {l_bins};
-        float v_ranges[] = {0, 255};
-        float ranges[][] = {v_ranges};
-
-        opencv_core.IplImage imageArr1[] = {image1};
-        opencv_core.IplImage imageArr2[] = {image2};
-        CvHistogram histogram1 = CvHistogram.create(1, hist_size, opencv_core.CV_HIST_ARRAY, ranges, 1);
-        CvHistogram histogram2 = CvHistogram.create(1, hist_size, opencv_core.CV_HIST_ARRAY, ranges, 1);
-        cvCalcHist(imageArr1, histogram1, 0, null);
-        cvCalcHist(imageArr2, histogram2, 0, null);
-        cvNormalizeHist(histogram1, 100.0);
-        cvNormalizeHist(histogram2, 100.0);
-
-        double c1 = cvCompareHist(histogram1, histogram2, CV_COMP_CORREL) * 100;
-        double c2 = cvCompareHist(histogram1, histogram2, CV_COMP_INTERSECT);
-
-        return (c1+c2)/2;
+        return -1;
     }
 
 
