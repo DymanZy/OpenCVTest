@@ -1,0 +1,10 @@
+{
+  "allAbis": [
+    "armeabi",
+    "armeabi-v7a"
+  ],
+  "validAbis": [
+    "ARMEABI",
+    "ARMEABI_V7A"
+  ]
+}

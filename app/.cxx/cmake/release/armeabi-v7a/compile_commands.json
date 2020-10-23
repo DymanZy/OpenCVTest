@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/dengzhuoyao/github/OpenCVTest/app/.cxx/cmake/release/armeabi-v7a",
+  "command": "/Users/dengzhuoyao/Library/Android/sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=armv7-none-linux-androideabi16 --gcc-toolchain=/Users/dengzhuoyao/Library/Android/sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/dengzhuoyao/Library/Android/sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/darwin-x86_64/sysroot  -Dnative_cpp_EXPORTS -I../../../../src/main/cpp/include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -march=armv7-a -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Oz -DNDEBUG  -fPIC   -o CMakeFiles/native-cpp.dir/src/main/cpp/native-cpp.cpp.o -c /Users/dengzhuoyao/github/OpenCVTest/app/src/main/cpp/native-cpp.cpp",
+  "file": "/Users/dengzhuoyao/github/OpenCVTest/app/src/main/cpp/native-cpp.cpp"
+}
+]

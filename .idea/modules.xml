@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/OpenCVTest.iml" filepath="$PROJECT_DIR$/OpenCVTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/OpenCVTest-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/OpenCVTest-app.iml" group="OpenCVTest/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/openCVLibrary2411/OpenCVTest-openCVLibrary2411.iml" filepath="$PROJECT_DIR$/.idea/modules/openCVLibrary2411/OpenCVTest-openCVLibrary2411.iml" group="OpenCVTest/openCVLibrary2411" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/github-OpenCVTest.iml" filepath="$PROJECT_DIR$/.idea/modules/github-OpenCVTest.iml" group="OpenCVTest" />
       <module fileurl="file://$PROJECT_DIR$/openCVLibrary2411/openCVLibrary2411.iml" filepath="$PROJECT_DIR$/openCVLibrary2411/openCVLibrary2411.iml" />
     </modules>
   </component>

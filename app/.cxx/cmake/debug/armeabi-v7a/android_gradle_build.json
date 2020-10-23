@@ -1,0 +1,43 @@
+{
+  "stringTable": {
+    "0": "/Users/dengzhuoyao/github/OpenCVTest/app/.cxx/cmake/debug/armeabi-v7a",
+    "1": "--target=armv7-none-linux-androideabi16 --gcc-toolchain=/Users/dengzhuoyao/Library/Android/sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/dengzhuoyao/Library/Android/sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -Dnative_cpp_EXPORTS -I../../../../src/main/cpp/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -march=armv7-a -mthumb -Wa,--noexecstack -Wformat -Werror=format-security -O0 -fno-limit-debug-info -fPIC"
+  },
+  "buildFiles": [
+    "/Users/dengzhuoyao/Library/Android/sdk/ndk/20.0.5594570/build/cmake/android.toolchain.cmake",
+    "/Users/dengzhuoyao/Library/Android/sdk/ndk/20.0.5594570/build/cmake/platforms.cmake",
+    "/Users/dengzhuoyao/github/OpenCVTest/app/CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "/Users/dengzhuoyao/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/dengzhuoyao/github/OpenCVTest/app/.cxx/cmake/debug/armeabi-v7a\" clean"
+  ],
+  "buildTargetsCommand": "/Users/dengzhuoyao/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja  -C \"/Users/dengzhuoyao/github/OpenCVTest/app/.cxx/cmake/debug/armeabi-v7a\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "native-cpp-Debug-armeabi-v7a": {
+      "buildCommand": "/Users/dengzhuoyao/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/dengzhuoyao/github/OpenCVTest/app/.cxx/cmake/debug/armeabi-v7a\" native-cpp",
+      "buildType": "debug",
+      "toolchain": "1839669555",
+      "abi": "armeabi-v7a",
+      "artifactName": "native-cpp",
+      "files": [
+        {
+          "src": "/Users/dengzhuoyao/github/OpenCVTest/app/src/main/cpp/native-cpp.cpp",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        }
+      ],
+      "headers": [],
+      "output": "/Users/dengzhuoyao/github/OpenCVTest/app/build/intermediates/cmake/debug/obj/armeabi-v7a/libnative-cpp.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "1839669555": {
+      "cppCompilerExecutable": "/Users/dengzhuoyao/Library/Android/sdk/ndk/20.0.5594570/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}
